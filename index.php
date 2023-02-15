@@ -6,7 +6,7 @@
 						
 			    
 
-						if(filter_input(INPUT_POST, 'btnPost') && empty($_FILES))
+						if(filter_input(INPUT_POST, 'btnPost') && $_FILES["userfile"]["name"][0] != '')
 						{
 							var_dump($_FILES);
 							foreach ($_FILES["userfile"]["error"] as $key => $error) {
@@ -347,7 +347,7 @@
 
 
 						function fileValidation() {
-							
+							$_FILES = [];
 							var fileInput = document.getElementById('userfile');
 
 							const arrayFinal = ["blbl.jpg"];
