@@ -1,3 +1,30 @@
+<?php		
+
+							error_reporting(E_ALL);
+							ini_set("display_errors", 1);
+
+						
+			    
+
+						if(filter_input(INPUT_POST, 'btnPost') && empty($_FILES))
+						{
+							var_dump($_FILES);
+							foreach ($_FILES["userfile"]["error"] as $key => $error) {
+							$error = false;
+							$fileTmpName = $_FILES['userfile']['tmp_name'][$key];
+							$uploads_dir = 'img/';
+							$imageInfo = getimagesize($fileTmpName);
+							
+							$name = basename($_FILES["userfile"]["name"][$key]);
+							  if (!$imageInfo === false) {
+							
+								
+								move_uploaded_file($fileTmpName, $uploads_dir . uniqid('', true) . $name);
+								}
+						}
+					}
+					?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,9 +34,6 @@
 	<title>Facebook le vrai</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link href="assets/css/bootstrap.css" rel="stylesheet">
-	<!--[if lt IE 9]>
-          <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
 	<link href="assets/css/facebook.css" rel="stylesheet">
 </head>
 
@@ -46,7 +70,7 @@
 									<a href="#"><i class="glyphicon glyphicon-home"></i> Home</a>
 								</li>
 								<li>
-									<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
+									<a href="#postModal" onclick='onOrOffButton()' role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
 								</li>
 								<li>
 									<a href="#postEdition" role="button" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> Edition</a>
@@ -84,7 +108,7 @@
 										<div class="panel-thumbnail"><img src="assets/img/roadhogpatch.jpg" class="img-responsive"></div>
 										<div class="panel-body">
 											<p class="lead">Patch de roadhog</p>
-											<p>45 Followers, 13 Posts</p>
+											<p>400000000000000000000 Followers, 13 Posts</p>
 
 											<p>
 												<img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
@@ -227,7 +251,7 @@
 										<div class="panel-thumbnail"><img src="assets/img/desitiny2.png" class="img-responsive"></div>
 										<div class="panel-body">
 											<p class="lead">Bientot le nouveau dlc</p>
-											<p>1,200 Followers, 83 Posts</p>
+											<p>12222222222 Followers, 83 Posts</p>
 
 											<p>
 												<img src="assets/img/photo.jpg" height="28px" width="28px">
@@ -274,8 +298,6 @@
 			</div>
 		</div>
 	</div>
-
-
 	<!--post modal-->
 	<div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
@@ -284,56 +306,102 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
 					Update Status
 				</div>
+				
+				<form class="form center-block" enctype="multipart/form-data" action="#" method="POST">
 				<div class="modal-body">
-					<form class="form center-block">
+
+					<!--Form utiliser pour le post d'image  -->
+					
+
+				
 						<div class="form-group">
 							<textarea class="form-control input-lg" autofocus="" placeholder="Que voulez-vous partager ?"></textarea>
 						</div>
 				</div>
 				<div class="modal-footer">
-					<input type="file" id="file" name="file" accept="image/png, image/gif, image/jpeg" onchange="fileValidation()" multiple>
+					 <input type="file" id="userfile" name="userfile[]" accept="image/png, image/gif, image/jpeg"  onchange="fileValidation()" multiple>
+
+					<div>
+						<input	type="submit" id="btnPost" name="btnPost" value="Post" >
+						
+					</div>
+				
+					
 					<script>
+					
+						function onOrOffButton(){
+
+							console.log("rgehuj");
+							var filePath = document.getElementById('userfile').files;
+
+							if(filePath.length == 0)
+							{
+								document.getElementById("btnPost").setAttribute("disabled", "");
+							}
+							else
+							{
+								document.getElementById("btnPost").removeAttribute("disabled");
+							}
+						
+						}
+
+
 						function fileValidation() {
 							
-							var fileInput =
-								document.getElementById('file');
+							var fileInput = document.getElementById('userfile');
 
 							const arrayFinal = ["blbl.jpg"];
 
 							var filePath = fileInput.files;
-
+							
 
 							// Allowing file type
 							var allowedExtensions =
 								/(\.jpg|\.jpeg|\.png|\.gif|\.jfif)$/i;
+							var sizeTotal = 0;
 							for (let index = 0; index < filePath.length; index++) {
-								if (!allowedExtensions.exec(filePath[index].name)) {
+								
+								sizeTotal += filePath[index].size;
+
+								if (!allowedExtensions.exec(filePath[index].name) ) {
 									
 									alert('Type de fichier invalide');
 									document.getElementById("btnPost").setAttribute("disabled", "");
 									break;
 								}
+								if( (filePath[index].size > 3000000))
+								{
+									alert('Un des fichier est trop volumineux (max 3Mb)');
+									document.getElementById("btnPost").setAttribute("disabled", "");
+									break;
+								}
+								if(sizeTotal > 70000000)
+								{
+									alert('La somme total de tous les fichiers est trop volumineuse (max 70Mb)');
+									document.getElementById("btnPost").setAttribute("disabled", "");
+									break;
+								}
 								else
 								{
-									
-									document.getElementById("btnPost").removeAttribute("disabled");;
+									document.getElementById("btnPost").removeAttribute("disabled");
 									
 								}
+
+							
 							
 							}
 							
 						
 						}
 					</script>
-					</form>
-					<div>
-						<button id= "btnPost" class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
-					</div>
+				
+				
 				</div>
 			</div>
 		</div>
 	</div>
-
+	</form>
+	
 	<script type="text/javascript" src="assets/js/jquery.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.js"></script>
 	<script type="text/javascript">
