@@ -2,13 +2,13 @@
 
 							error_reporting(E_ALL);
 							ini_set("display_errors", 1);
+							require_once("function.php");
 
-						
-			    
+							$base = new M152();
 
 						if(filter_input(INPUT_POST, 'btnPost') && $_FILES["userfile"]["name"][0] != '')
 						{
-							var_dump($_FILES);
+							$texte = filter_input(INPUT_POST, 'texte');
 							foreach ($_FILES["userfile"]["error"] as $key => $error) {
 							$error = false;
 							$fileTmpName = $_FILES['userfile']['tmp_name'][$key];
@@ -250,7 +250,7 @@
 									<div class="panel panel-default">
 										<div class="panel-thumbnail"><img src="assets/img/desitiny2.png" class="img-responsive"></div>
 										<div class="panel-body">
-											<p class="lead">Bientot le nouveau dlc</p>
+											<p class="lead">Le nouveau dlc est arrivé</p>
 											<p>12222222222 Followers, 83 Posts</p>
 
 											<p>
@@ -315,7 +315,7 @@
 
 				
 						<div class="form-group">
-							<textarea class="form-control input-lg" autofocus="" placeholder="Que voulez-vous partager ?"></textarea>
+							<textarea class="form-control input-lg" name="texte" autofocus="" placeholder="Que voulez-vous partager ?"></textarea>
 						</div>
 				</div>
 				<div class="modal-footer">
