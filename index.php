@@ -212,7 +212,7 @@
 
 									<div class="panel panel-default">
 										<div class="panel-heading"><a href="#" class="pull-right">View all</a>
-											<h4>Stackoverflow</h4>
+											<h4>Stackover§flow</h4>
 										</div>
 										<div class="panel-body">
 											<img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="#">Keyword: Bootstrap</a>
