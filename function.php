@@ -1,157 +1,112 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-// Les réglages de la base
+require_once("database.php");
+//(\.jpg|\.jpeg|\.png|\.gif|\.jfif|\.mp4|\.mp3|\.oga|\.midi|\.weba|\.wav|\.mid)$/i;
 
 
-class M152
+function showPost(){
+	$base = new M152();
+
+	$tableauExtensionImage = [
+		'jpg',
+		'jpeg',
+		'png',
+		'gif',
+		'jfif'
+	];
+
+	$tableauExtensionAudio = [
+		'mp3',
+		'oga',
+		'midi',
+		'weba',
+		'wav',
+		'mid'
+	];
+	$extensionVideo = 'mp4';
+	
+	foreach ($base->readPost() as $keys => $idPost) {
+
+		echo "<div class=\"panel panel-default\">";
+		echo " <form action=\"#\" method=\"post\">";
+		echo "<input type=\"hidden\" name=\"id\" value=\"" . $idPost['idPost'] ."\">";
+		echo "<button type=\"submit\" value=\"del\">Delete</button>";
+		echo "<button type=\"submit\" value=\"edit\">Edit</button>";
+		echo "</form>";
+		echo "<div class=\"panel-thumbnail\">";
+		
+		foreach ($base->readThisOne($idPost['idPost']) as $key => $value) {
+		if(in_array($value['typeMedia'],$tableauExtensionImage)){
+			echo "<img src=\"ressources/" . $value['nomFichierMedia']  ."\" style=\"width: 400px;\" class=\"img-responsive\" style>";
+		}
+		else if(in_array($value['typeMedia'], $tableauExtensionAudio)){
+			echo "<audio controls src=\"ressources/" . $value['nomFichierMedia'] . "\"></audio>";
+		}
+		else if($value['typeMedia'] == $extensionVideo){
+			echo "<video autoplay loop muted src=\"ressources/" . $value['nomFichierMedia'] . "\" width=\"400px\"></video>";
+		}
+		
+			 } 
+			 echo"</div>";
+			 echo "<div class=\"panel-body\">";
+			 echo "<p class=\"lead\">" . $value['commentaire'] . "</p>";
+			 echo"</div></div>";
+			
+		} 
+}
+
+
+
+function uploadFile()
 {
+	$base = new M152();
+	$listMime = [
+		'image/jpg',
+		'image/jpeg',
+		'image/png',
+		'image/gif',
+		'image/jfif',
+		'video/mp4',
+		'audio/x-wav',
+		'audio/webm',
+		'audio/ogg',
+		'audio/midi',
+		'audio/mpeg'
+	];
+	try{
 
-  private
-    $pdo = null;
-  private
-    $psReadMedia = null;
+	if (filter_input(INPUT_POST, 'btnPost') && $_FILES["userfile"]["name"][0] != '') {
+		$texte = filter_input(INPUT_POST, 'texte');
+		var_dump($_FILES);
 
-    private
-    $psReadPost = null;
+		$tmp = array_count_values($_FILES['userfile']['error']);
 
-    private
-    $psUpdatePost = null;
-
-    private
-    $psInsertMedia = null;
-
-    private
-    $psInsertPost = null;
-
-  public function __construct()
-  {
-      try {
-        $this->pdo = new PDO('mysql:host=' . 'localhost' . ';dbname=' . 'm152', 'user', 'Super', 
-        array(
-          PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-          PDO::ATTR_PERSISTENT => true
-        ));
-
-        // Read
-        $sql = "SELECT *
-                FROM MEDIA" ;
-        $this->psReadMedia = $this->pdo->prepare($sql);
-        $this->psReadMedia->setFetchMode(PDO::FETCH_UNIQUE);
-
-          // Read
-          $sql = "SELECT *
-          FROM POST" ;
-         $this->psReadPost = $this->pdo->prepare($sql);
-         $this->psReadPost->setFetchMode(PDO::FETCH_UNIQUE);
+		if (isset($tmp[1])) {
+			$cnt = $tmp[1];
+		}
 
 
+		if ($cnt != count($_FILES['userfile']['error'])) {
+			$base->insertPost($texte);
+		}
 
-       // Update
-       $sql = "UPDATE POST SET 
-       commentaire = :COMMENTAIRE , dateDeModification = :DATEDEMODIFICATION  ";
-       $this->psUpdatePost = $this->pdo->prepare($sql);
- 
+		foreach ($_FILES["userfile"]["error"] as $key => $error) {
+			$error = false;
 
-        //Create
-        $sql = "INSERT INTO MEDIA (nomFichierMedia, typeMedia, idPost)
-                VALUES (:NOMFICHIERMEDIA, :TYPEMEDIA, :IDPOST)";
-        $this->psInsertMedia = $this->pdo->prepare($sql);
+			$fileTmpName = $_FILES['userfile']['tmp_name'][$key];
+			$uploads_dir = 'ressources/';
+		
 
-        
-        //Create
-        $sql = "INSERT INTO POST (commentaire)
-                VALUES (:COMMENTAIRE)";
-        $this->psInsertPost = $this->pdo->prepare($sql);
-        
-      } catch (PDOException $e) {
-        // print "Erreur !: " . $e->getMessage() . "<br/>";
-        die("Erreur !: " . $e->getMessage() . "<br/>");
-      }
-    }
-  
-//Lit si le cadena est actif
-  function readMedia(){
-    try {
-
-        if($this->psReadMedia->execute()){
-            $answer = $this->psReadMedia->fetch();
-        }
-    
-    } catch(PDOException $e){
-        echo $e->getMessage();
-    }
-    return $answer;
-
-  }
-  //Lit si le velo est volé
-  function readPost(){
-    try {
-
-        if($this->psReadPost->execute()){
-            $answer = $this->psReadPost->fetch();
-        }
-    
-    } catch(PDOException $e){
-        echo $e->getMessage();
-    }
-    return $answer;
-
-  }
-
-  //met a jour le cadena
-  function updatePost($commentaire, $dateDeModif)
-  {
-    $answer = false;
-    try {
-
-  
-      $this->psUpdatePost->bindParam(':COMMENTAIRE', $commentaire);
-      $this->psUpdatePost->bindParam(':DATEDEMODIFICATION', $dateDeModif);
- 
-
-      if ($this->psUpdatePost->execute())
-        $answer = true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-    }
-
-    return $answer;
-  }
-//Simule le vol du vélo
-
-  function insertMedia($nomMedia, $typeMedia, $idPost)
-  {
-    $answer = false;
-    try {
-  
-      $this->psInsertMedia->bindParam(':NOMFICHIERMEDIA', $nomMedia);
-      $this->psInsertMedia->bindParam(':TYPEMEDIA', $typeMedia);
-      $this->psInsertMedia->bindParam(':IDPOST', $idPost);
-
-      if ($this->psInsertMedia->execute())
-        $answer = true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-    }
-
-    return $answer;
-  }
-
-  function insertPost($commentaire)
-  {
-    $answer = false;
-    try {
-  
-      $this->psInsertPost->bindParam(':COMMENTAIRE', $commentaire);
-
-      if ($this->psInsertPost->execute())
-        $answer = true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-    }
-
-    return $answer;
-  }
+			$name = basename($_FILES["userfile"]["name"][$key]);
+			if (in_array( mime_content_type($fileTmpName), $listMime)) {
+				$idUnique = uniqid('', true) . $name;
+				$info = new SplFileInfo($name);
+				$base->insertMedia($idUnique, $info->getExtension(), $base->lastInsertId);
+				move_uploaded_file($fileTmpName, $uploads_dir . $idUnique);
+			}
+			header('Location: index.php');
+		}
+	}
+}	catch(Throwable $e){
+	   echo $e->getMessage();
+	}
 }

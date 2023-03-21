@@ -1,29 +1,9 @@
-<?php		
-
-							error_reporting(E_ALL);
-							ini_set("display_errors", 1);
-							require_once("function.php");
-
-							$base = new M152();
-
-						if(filter_input(INPUT_POST, 'btnPost') && $_FILES["userfile"]["name"][0] != '')
-						{
-							$texte = filter_input(INPUT_POST, 'texte');
-							foreach ($_FILES["userfile"]["error"] as $key => $error) {
-							$error = false;
-							$fileTmpName = $_FILES['userfile']['tmp_name'][$key];
-							$uploads_dir = 'img/';
-							$imageInfo = getimagesize($fileTmpName);
-							
-							$name = basename($_FILES["userfile"]["name"][$key]);
-							  if (!$imageInfo === false) {
-							
-								
-								move_uploaded_file($fileTmpName, $uploads_dir . uniqid('', true) . $name);
-								}
-						}
-					}
-					?>
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+require_once("function.php");
+uploadFile();
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,7 +20,7 @@
 <body>
 
 	<div class="wrapper">
-		<div class="box">
+		<div class="box"> 
 			<div class="row row-offcanvas row-offcanvas-left">
 				<!-- main right col -->
 				<div class="column col-sm-10 col-xs-11" id="main">
@@ -183,239 +163,155 @@
 
 								<!-- main col right -->
 								<div class="col-sm-7">
-
-									<div class="well">
-										<form class="form">
-											<h4>Sign-up</h4>
-											<div class="input-group text-center">
-												<input class="form-control input-lg" placeholder="Enter your email address" type="text">
-												<span class="input-group-btn"><button class="btn btn-lg btn-primary" type="button">OK</button></span>
-											</div>
-										</form>
+									<?php showPost(); ?>
+									<div>
 									</div>
+								</div><!--/row-->
 
-									<div class="panel panel-default">
-										<div class="panel-heading"><a href="#" class="pull-right">View all</a>
-											<h4>Bootply Editor &amp; Code Library</h4>
-										</div>
-										<div class="panel-body">
-											<p><img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="#">The Bootstrap Playground</a></p>
-											<div class="clearfix"></div>
-											<hr>
-											Design, build, test, and prototype
-											using Bootstrap in real-time from your Web browser. Bootply combines the
-											power of hand-coded HTML, CSS and JavaScript with the benefits of
-											responsive design using Bootstrap. Find and showcase Bootstrap-ready
-											snippets in the 100% free Bootply.com code repository.
-										</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a> <small class="text-muted">|</small> <a href="#">Google+</a>
 									</div>
-
-									<div class="panel panel-default">
-										<div class="panel-heading"><a href="#" class="pull-right">View all</a>
-											<h4>Stackover§flow</h4>
-										</div>
-										<div class="panel-body">
-											<img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="#">Keyword: Bootstrap</a>
-											<div class="clearfix"></div>
-											<hr>
-
-											<p>If you're looking for help with Bootstrap code, the <code>twitter-bootstrap</code> tag at <a href="http://stackoverflow.com/questions/tagged/twitter-bootstrap">Stackoverflow</a> is a good place to find answers.</p>
-
-											<hr>
-											<form>
-												<div class="input-group">
-													<div class="input-group-btn">
-														<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-													</div>
-													<input class="form-control" placeholder="Add a comment.." type="text">
-												</div>
-											</form>
-
-										</div>
-									</div>
-
-									<div class="panel panel-default">
-										<div class="panel-heading"><a href="#" class="pull-right">View all</a>
-											<h4>Portlet Heading</h4>
-										</div>
-										<div class="panel-body">
-											<ul class="list-group">
-												<li class="list-group-item">Modals</li>
-												<li class="list-group-item">Sliders / Carousel</li>
-												<li class="list-group-item">Thumbnails</li>
-											</ul>
-										</div>
-									</div>
-
-									<div class="panel panel-default">
-										<div class="panel-thumbnail"><img src="assets/img/desitiny2.png" class="img-responsive"></div>
-										<div class="panel-body">
-											<p class="lead">Le nouveau dlc est arrivé</p>
-											<p>12222222222 Followers, 83 Posts</p>
-
-											<p>
-												<img src="assets/img/photo.jpg" height="28px" width="28px">
-												<img src="assets/img/photo.png" height="28px" width="28px">
-												<img src="assets/img/photo_002.jpg" height="28px" width="28px">
-											</p>
-										</div>
-									</div>
-
 								</div>
-							</div><!--/row-->
 
-							<div class="row">
-								<div class="col-sm-6">
-									<a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a> <small class="text-muted">|</small> <a href="#">Google+</a>
+								<div class="row" id="footer">
+									<div class="col-sm-6">
+
+									</div>
+									<div class="col-sm-6">
+										<p>
+											<a href="#" class="pull-right">�Copyright 2013</a>
+										</p>
+									</div>
 								</div>
-							</div>
 
-							<div class="row" id="footer">
-								<div class="col-sm-6">
+								<hr>
 
-								</div>
-								<div class="col-sm-6">
-									<p>
-										<a href="#" class="pull-right">�Copyright 2013</a>
-									</p>
-								</div>
-							</div>
+								<h4 class="text-center">
+									<a href="http://usebootstrap.com/theme/facebook" target="ext">Download this Template @Bootply</a>
+								</h4>
 
-							<hr>
-
-							<h4 class="text-center">
-								<a href="http://usebootstrap.com/theme/facebook" target="ext">Download this Template @Bootply</a>
-							</h4>
-
-							<hr>
+								<hr>
 
 
-						</div><!-- /col-9 -->
-					</div><!-- /padding -->
+							</div><!-- /col-9 -->
+						</div><!-- /padding -->
+					</div>
+					<!-- /main -->
+
 				</div>
-				<!-- /main -->
-
 			</div>
 		</div>
-	</div>
-	<!--post modal-->
-	<div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
-					Update Status
-				</div>
-				
-				<form class="form center-block" enctype="multipart/form-data" action="#" method="POST">
-				<div class="modal-body">
+		<!--post modal-->
+		<div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
+						Update Status
+					</div>
 
-					<!--Form utiliser pour le post d'image  -->
-					
+					<form class="form center-block" enctype="multipart/form-data" action="#" method="POST">
+						<div class="modal-body">
 
-				
-						<div class="form-group">
-							<textarea class="form-control input-lg" name="texte" autofocus="" placeholder="Que voulez-vous partager ?"></textarea>
+							<!--Form utiliser pour le post d'image  -->
+
+
+
+							<div class="form-group">
+								<textarea class="form-control input-lg" maxlength="256" name="texte" autofocus="" placeholder="Que voulez-vous partager ?"></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="file" id="userfile" name="userfile[]" accept="image/png, image/gif, image/jpeg, video/mp4, audio/x-wav, audio/webm, audio/ogg, audio/midi, audio/mpeg" onchange="fileValidation()" multiple>
+
+							<div>
+								<input type="submit" id="btnPost" name="btnPost" value="Post">
+
+							</div>
+
+
+							<script>
+								function onOrOffButton() {
+
+									console.log("rgehuj");
+									var filePath = document.getElementById('userfile').files;
+
+									if (filePath.length == 0) {
+										document.getElementById("btnPost").setAttribute("disabled", "");
+									} else {
+										document.getElementById("btnPost").removeAttribute("disabled");
+									}
+
+								}
+
+
+								function fileValidation() {
+									$_FILES = [];
+									var fileInput = document.getElementById('userfile');
+
+									const arrayFinal = ["blbl.jpg"];
+
+									var filePath = fileInput.files;
+
+
+									// Allowing file type
+									var allowedExtensions =
+										/(\.jpg|\.jpeg|\.png|\.gif|\.jfif|\.mp4|\.mp3|\.oga|\.midi|\.weba|\.wav|\.mid)$/i;
+							
+									var sizeTotal = 0;
+									for (let index = 0; index < filePath.length; index++) {
+									
+										sizeTotal += filePath[index].size;
+
+										if (!allowedExtensions.exec(filePath[index].name)) {
+
+											alert('Type de fichier invalide');
+											document.getElementById("btnPost").setAttribute("disabled", "");
+											break;
+										}
+										if ((filePath[index].size > 3000000)) {
+											alert('Un des fichier est trop volumineux (max 3Mb)');
+											document.getElementById("btnPost").setAttribute("disabled", "");
+											break;
+										}
+										if (sizeTotal > 70000000) {
+											alert('La somme total de tous les fichiers est trop volumineuse (max 70Mb)');
+											document.getElementById("btnPost").setAttribute("disabled", "");
+											break;
+										} else {
+											document.getElementById("btnPost").removeAttribute("disabled");
+
+										}
+
+
+
+									}
+
+
+								}
+							</script>
+
+
 						</div>
 				</div>
-				<div class="modal-footer">
-					 <input type="file" id="userfile" name="userfile[]" accept="image/png, image/gif, image/jpeg"  onchange="fileValidation()" multiple>
-
-					<div>
-						<input	type="submit" id="btnPost" name="btnPost" value="Post" >
-						
-					</div>
-				
-					
-					<script>
-					
-						function onOrOffButton(){
-
-							console.log("rgehuj");
-							var filePath = document.getElementById('userfile').files;
-
-							if(filePath.length == 0)
-							{
-								document.getElementById("btnPost").setAttribute("disabled", "");
-							}
-							else
-							{
-								document.getElementById("btnPost").removeAttribute("disabled");
-							}
-						
-						}
-
-
-						function fileValidation() {
-							$_FILES = [];
-							var fileInput = document.getElementById('userfile');
-
-							const arrayFinal = ["blbl.jpg"];
-
-							var filePath = fileInput.files;
-							
-
-							// Allowing file type
-							var allowedExtensions =
-								/(\.jpg|\.jpeg|\.png|\.gif|\.jfif)$/i;
-							var sizeTotal = 0;
-							for (let index = 0; index < filePath.length; index++) {
-								
-								sizeTotal += filePath[index].size;
-
-								if (!allowedExtensions.exec(filePath[index].name) ) {
-									
-									alert('Type de fichier invalide');
-									document.getElementById("btnPost").setAttribute("disabled", "");
-									break;
-								}
-								if( (filePath[index].size > 3000000))
-								{
-									alert('Un des fichier est trop volumineux (max 3Mb)');
-									document.getElementById("btnPost").setAttribute("disabled", "");
-									break;
-								}
-								if(sizeTotal > 70000000)
-								{
-									alert('La somme total de tous les fichiers est trop volumineuse (max 70Mb)');
-									document.getElementById("btnPost").setAttribute("disabled", "");
-									break;
-								}
-								else
-								{
-									document.getElementById("btnPost").removeAttribute("disabled");
-									
-								}
-
-							
-							
-							}
-							
-						
-						}
-					</script>
-				
-				
-				</div>
 			</div>
 		</div>
-	</div>
-	</form>
-	
-	<script type="text/javascript" src="assets/js/jquery.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('[data-toggle=offcanvas]').click(function() {
-				$(this).toggleClass('visible-xs text-center');
-				$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
-				$('.row-offcanvas').toggleClass('active');
-				$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
-				$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
-				$('#btnShow').toggle();
+		</form>
+		<script type="text/javascript" src="assets/js/jquery.js"></script>
+		<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('[data-toggle=offcanvas]').click(function() {
+					$(this).toggleClass('visible-xs text-center');
+					$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
+					$('.row-offcanvas').toggleClass('active');
+					$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
+					$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
+					$('#btnShow').toggle();
+				});
 			});
-		});
-	</script>
+		</script>
 </body>
 
 </html>
