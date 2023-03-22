@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 require_once("function.php");
-uploadFile();
+
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ uploadFile();
 <body>
 
 	<div class="wrapper">
-		<div class="box"> 
+		<div class="box">
 			<div class="row row-offcanvas row-offcanvas-left">
 				<!-- main right col -->
 				<div class="column col-sm-10 col-xs-11" id="main">
@@ -74,25 +74,30 @@ uploadFile();
 						</nav>
 					</div>
 					<!-- /top nav -->
+					<?php
+					$base = new M152();
+					$id = filter_input(INPUT_GET, 'idPost', FILTER_SANITIZE_NUMBER_INT);
+					
+					ShowMediaForEdit($id);
+					
+					?>
 
-				
-		
-		</div>
-		</form>
-		<script type="text/javascript" src="assets/js/jquery.js"></script>
-		<script type="text/javascript" src="assets/js/bootstrap.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('[data-toggle=offcanvas]').click(function() {
-					$(this).toggleClass('visible-xs text-center');
-					$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
-					$('.row-offcanvas').toggleClass('active');
-					$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
-					$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
-					$('#btnShow').toggle();
-				});
-			});
-		</script>
+				</div>
+				</form>
+				<script type="text/javascript" src="assets/js/jquery.js"></script>
+				<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+				<script type="text/javascript">
+					$(document).ready(function() {
+						$('[data-toggle=offcanvas]').click(function() {
+							$(this).toggleClass('visible-xs text-center');
+							$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
+							$('.row-offcanvas').toggleClass('active');
+							$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
+							$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
+							$('#btnShow').toggle();
+						});
+					});
+				</script>
 </body>
 
 </html>

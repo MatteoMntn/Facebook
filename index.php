@@ -2,7 +2,11 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 require_once("function.php");
-uploadFile();
+
+if (filter_input(INPUT_POST, 'btnPost')) {
+	uploadFile();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +24,7 @@ uploadFile();
 <body>
 
 	<div class="wrapper">
-		<div class="box"> 
+		<div class="box">
 			<div class="row row-offcanvas row-offcanvas-left">
 				<!-- main right col -->
 				<div class="column col-sm-10 col-xs-11" id="main">
@@ -258,10 +262,10 @@ uploadFile();
 									// Allowing file type
 									var allowedExtensions =
 										/(\.jpg|\.jpeg|\.png|\.gif|\.jfif|\.mp4|\.mp3|\.oga|\.midi|\.weba|\.wav|\.mid)$/i;
-							
+
 									var sizeTotal = 0;
 									for (let index = 0; index < filePath.length; index++) {
-									
+
 										sizeTotal += filePath[index].size;
 
 										if (!allowedExtensions.exec(filePath[index].name)) {
